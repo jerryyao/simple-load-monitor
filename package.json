@@ -1,0 +1,17 @@
+{
+  "name": "simple-dog-monitor",
+  "version": "1.0.0",
+  "description": "A simple load monitoring web app.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Matteo Palvarini",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.15.2",
+    "os-monitor": "^1.0.5",
+    "socket.io": "^1.7.3"
+  }
+}
