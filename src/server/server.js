@@ -5,14 +5,23 @@ const io = require('socket.io')(server)
 
 const listen = () => {
   server.listen(3000, () => {
-    console.log('Server listening on port 3000...')
+    console.log('Server listening on port 3000...');
   })
 };
 
 const close = () => {
     server.close(() => {
-      console.log('Server stopped.')
+      console.log('Server stopped.');
     });
 };
+
+/* Routes */
+
+app.get('/', (req, res) => {
+  res.render('index', { data: 'test' });
+});
+
+app.use(express.static('public'));
+
 
 listen();

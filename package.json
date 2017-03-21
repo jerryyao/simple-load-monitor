@@ -1,10 +1,11 @@
 {
-  "name": "simple-dog-monitor",
+  "name": "simple-load-monitor",
   "version": "1.0.0",
-  "description": "A simple load monitoring web app.",
+  "description": "A simple load monitoring web app in React and D3.",
   "main": "index.js",
   "scripts": {
-    "start": "node ./src/server/server.js",
+    "start": "webpack && node server.js",
+    "dev": "webpack --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Matteo Palvarini",
