@@ -1,0 +1,20 @@
+{
+  "extends": "airbnb",
+  "parser": "babel-eslint",
+  "rules": {
+    "no-empty-label": 0,
+    "space-before-keywords": 0,
+    "space-after-keywords": 0,
+    "space-return-throw-case": 0,
+    "arrow-body-style": 0,
+    "max-len": [2, 150],
+    "new-cap": 0,
+    "camelcase": 0,
+    "react/prop-types": 1,
+    "react/jsx-no-bind": [2, {
+      "allowArrowFunctions": true
+    }],
+    "no-underscore-dangle": 0,
+    "no-param-reassign": 0
+  }
+}

@@ -15,13 +15,8 @@ const close = () => {
     });
 };
 
-/* Routes */
+// Route to index.html
+app.use('/', express.static('public'));
 
-app.get('/', (req, res) => {
-  res.render('index', { data: 'test' });
-});
-
-app.use(express.static('public'));
-
-
+// Start server
 listen();
