@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "npm i && webpack && npm run copy && node src/server/index.js",
-    "dev": "npm run start && webpack --watch",
+    "dev": "concurrently --kill-others \"nodemon src/server/index.js\" \"npm run copy && webpack --watch\"",
     "copy": "cp src/client/index.html public/index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -29,6 +29,7 @@
     "babel-preset-es2015": "^6.24.0",
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-0": "^6.22.0",
+    "concurrently": "^3.4.0",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
