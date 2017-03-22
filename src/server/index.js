@@ -7,7 +7,7 @@ const monitor = require('os-monitor')
 const Queue = require('./queue');
 
 const history = new Queue();
-console.log(history)
+const alerts = [];
 
 const listen = () => {
   server.listen(3000, () => {
@@ -30,5 +30,26 @@ monitor.start({
   immediate: true,
 });
 
+// Listen to monitor events
+monitor.on('monitor', handleMonitor)
+
+// Emit initial state on socket connection with a client
+io.on('connection', (client) => {
+  client.emit('initialState', {
+    history: history.toArray(),
+    alerts,
+  });
+});
+
 // Start server
 listen();
+
+// Broadcast monitor events
+function handleMonitor(e) {
+  const data = {
+
+  };
+  console.log('monitor:', e)
+  io.emit('monitor', e);
+};
+
