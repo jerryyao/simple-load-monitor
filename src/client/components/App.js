@@ -6,7 +6,7 @@ class App extends React.Component {
     const log = data => console.log(data)
     const socket = io.connect('http://localhost:3000/');
     socket.on('initialState', data => {console.log(data)});
-    socket.on('monitor', data => log(data));
+    socket.on('monitor', (e, data) => log(e, data));
   }
 
   render() {
