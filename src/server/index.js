@@ -40,27 +40,27 @@ const handleMonitor = (e) => {
   }
 
   eventBuffer.push(dataPoint);
-  if (isFull(eventBuffer, monitor.seconds(10))) {
+  if (isFull(eventBuffer, monitor.seconds(5))) {
     const total = eventBuffer.reduce((sum, e) => sum + e.loadavg, 0);
     const avg = total / eventBuffer.length;
     const isAlert = avg > LOAD_ALERT_THRESHOLD;
-    const notification = { avg, isAlert, timestamp: dataPoint.timestamp }
+    const notification = { loadAvg: avg, isAlert, timestamp: dataPoint.timestamp }
 
     // Emit notification only if it's an alert or recovery
-    if (isAlert || (!isAlert && lastNotification && lastNotification.isAlert)) {
+    if (isAlert || (!isAlert && !!lastNotification && lastNotification.isAlert)) {
       lastNotification = notification;
       io.emit('notification', notification);
     }
     eventBuffer.length = 0; // reset buffer
   }
 
-  io.emit('monitor', dataPoint);
+  io.emit('monitor', history.toArray());
 };
 
 const isFull = (array, deltaMaxTime) => {
   const oldest = array[0].timestamp;
   const newest = array[array.length - 1].timestamp;
-  return oldest + deltaMaxTime <= newest;
+  return newest - oldest >= deltaMaxTime;
 };
 
 // Route to index.html

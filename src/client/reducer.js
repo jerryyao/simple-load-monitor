@@ -2,15 +2,20 @@ import createActions from 'src/lib/utils/create-actions';
 import { createReducer } from 'redux-act';
 
 export const initialState = {
-  value: null,
+  history: [],
+  notifications: [],
 };
 
-export const Actions = createActions('simpleLoadMonitor', [
-  'action',
+export const actions = createActions('simpleLoadMonitor', [
+  'setField', 'addNotification',
 ]);
 
 export const reducer = createReducer({
-  [Actions.action](state, value) {
-    return { ...state, value };
+  [actions.setField](state, { key, value }) {
+    return { ...state, [key]: value };
+  },
+
+  [actions.addNotification](state, notification) {
+    return { ...state, notifications: [notification, ...state.notifications] };
   },
 }, initialState);

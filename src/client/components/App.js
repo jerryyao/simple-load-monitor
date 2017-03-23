@@ -1,19 +1,22 @@
-import React from 'react';
-import io from 'socket.io-client';
+import React, { PropTypes } from 'react';
+import Notification from './Notification';
 
 class App extends React.Component {
-  componentWillMount() {
-    const log = data => console.log(data)
-    const socket = io.connect('http://localhost:3000/');
-    socket.on('initialState', data => {console.log(data)});
-    socket.on('monitor', (e, data) => log(e, data));
-    socket.on('notification', (data) => log(data));
-    // socket.emit('startIncreaseLoad');
-  }
-
   render() {
-    return <div>Test!</div>;
+    const { notifications } = this.props.model;
+    return (
+      <div>
+        <div className={'notifications'} >
+          {notifications.map((notification) => (
+            <Notification key={notification.timestamp} {...notification} />
+          ))}
+        </div>
+      </div>);
   }
 }
+
+App.propTypes = {
+  model: PropTypes.object.isRequired,
+};
 
 export default App;

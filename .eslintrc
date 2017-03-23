@@ -10,7 +10,7 @@
     "max-len": [2, 150],
     "new-cap": 0,
     "camelcase": 0,
-    "react/prop-types": 1,
+    "react/prop-types": 0,
     "react/jsx-no-bind": [2, {
       "allowArrowFunctions": true
     }],
