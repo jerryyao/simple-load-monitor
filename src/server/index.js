@@ -6,8 +6,10 @@ const io = require('socket.io')(server)
 const os = require('os')
 const monitor = require('os-monitor')
 const Queue = require('./queue');
+const exec = require('child_process').exec;
 
-const LOAD_ALERT_THRESHOLD = 1;
+const NUM_CPUS = os.cpus().length
+const LOAD_ALERT_THRESHOLD = NUM_CPUS / 4;
 
 const history = new Queue();
 let eventBuffer = [];
@@ -38,7 +40,7 @@ const handleMonitor = (e) => {
   }
 
   eventBuffer.push(dataPoint);
-  if (isFull(eventBuffer, monitor.minutes(2))) {
+  if (isFull(eventBuffer, monitor.seconds(10))) {
     const total = eventBuffer.reduce((sum, e) => sum + e.loadavg, 0);
     const avg = total / eventBuffer.length;
     const isAlert = avg > LOAD_ALERT_THRESHOLD;
@@ -73,10 +75,18 @@ monitor.start({
 // Listen to monitor events
 monitor.on('monitor', handleMonitor)
 
-// Emit initial state on socket connection with a client
+// Setup socket connection with client
 io.on('connection', (client) => {
   client.emit('initialState', {
     history: history.toArray(),
+  });
+
+  client.on('startIncreaseLoad', () => {
+    exec('cat /dev/zero > /dev/null');
+  });
+
+  client.on('stopIncreaseLoad', () => {
+    exec('killall cat');
   });
 });
 
