@@ -1,7 +1,8 @@
 import React, { PropTypes } from 'react';
+import classes from './notifications.css';
 
 const Notification = (props) => (
-  <div className={'test'} >
+  <div className={classes.notification} >
     <img />
     <span>{props.loadAvg}</span>
   </div>

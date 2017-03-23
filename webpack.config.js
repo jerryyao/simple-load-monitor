@@ -4,7 +4,7 @@ module.exports = {
   entry: './src/client/index.js',
   output: {
     path: __dirname,
-    filename: './public/bundle.js'
+    filename: './public/bundle.js',
   },
   module: {
     loaders: [{
@@ -13,11 +13,11 @@ module.exports = {
       loader: 'babel-loader',
       query: {
         presets: ['react', 'es2015', 'stage-0'],
-      }
-    },
-    {
-      test: /\.css$/,
-      loader: 'style-loader!css-loader!postcss-loader',
+      },
+    }, {
+      test: /\.(css)$/,
+      exclude: /node_modules/,
+      loader: 'style-loader!css-loader?importLoaders=1&modules&localIdentName=[local]--[hash:base64:5]',
     }],
   },
   resolve: { modules: ['node_modules', path.resolve(__dirname)] },
