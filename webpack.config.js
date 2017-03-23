@@ -15,9 +15,9 @@ module.exports = {
         presets: ['react', 'es2015', 'stage-0'],
       },
     }, {
-      test: /\.(css)$/,
+      test: /\.css$/,
       exclude: /node_modules/,
-      loader: 'style-loader!css-loader?importLoaders=1&modules&localIdentName=[local]--[hash:base64:5]',
+      loader: 'style-loader!css-loader?importLoaders=1&camelCase&modules&localIdentName=[local]--[hash:base64:5]',
     }],
   },
   resolve: { modules: ['node_modules', path.resolve(__dirname)] },

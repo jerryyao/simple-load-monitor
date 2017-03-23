@@ -1,0 +1,35 @@
+
+.notification {
+  position: relative;
+  padding: 0 0 0 64px;
+  border-top: 1px solid #ddd;
+}
+
+.notification:last-child {
+  border-bottom: 1px solid #ddd;
+}
+
+.notification .title {
+  display: block;
+  font-size: 14px;
+  line-height: 45px;
+  font-weight: bold;
+  color: #4d4d4d;
+}
+
+.notificationBody {
+  min-height: 70px;
+  border-right: 10px solid #b3e586;
+}
+
+.notificationFooter {
+  height: 15px;
+}
+
+.serviceImg {
+  position: absolute;
+  left: 0;
+  top: 2px;
+  width: 48px;
+  height: 48px;
+}
