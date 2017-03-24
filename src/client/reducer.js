@@ -3,7 +3,23 @@ import { createReducer } from 'redux-act';
 
 export const initialState = {
   history: [],
-  notifications: [],
+  notifications: [
+    {
+      "loadAvg": 1.9803873697916667,
+      "isAlert": false,
+      "timestamp": 149032334498351
+    },
+    {
+      "loadAvg": 1.9803873697916667,
+      "isAlert": true,
+      "timestamp": 149032343498351
+    },
+    {
+      "loadAvg": 1.9803873697916667,
+      "isAlert": false,
+      "timestamp": 149032349834351
+    },
+  ],
 };
 
 export const actions = createActions('simpleLoadMonitor', [
