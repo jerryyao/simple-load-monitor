@@ -1,21 +1,23 @@
 import React, { PropTypes } from 'react';
 import LineChart from 'src/lib/components/LineChart';
-import Notification from './Notification';
+import classesBtn from 'src/lib/styles/buttons.css';
 import classes from './app.css';
+import Notification from './Notification';
 import { actions } from '../reducer';
 
 class App extends React.Component {
   state = {
-    stressTestOn: false,
+    stressTestCount: 0,
   }
 
-  handleStressBtnClick = () => {
-    if (!this.state.stressTestOn) {
-      this.props.socket.emit('startIncreaseLoad');
-    } else {
-      this.props.socket.emit('stopIncreaseLoad');
-    }
-    this.setState({ stressTestOn: !this.state.stressTestOn });
+  handleStressStart = () => {
+    this.props.socket.emit('startIncreaseLoad');
+    this.setState({ stressTestCount: this.state.stressTestCount + 1 });
+  }
+
+  handleStressStop = () => {
+    this.props.socket.emit('stopIncreaseLoad');
+    this.setState({ stressTestCount: 0 });
   }
 
   render() {
@@ -30,9 +32,14 @@ class App extends React.Component {
           <section>
             <h2>{'CPU Load Average over the past 10 minutes'}</h2>
             <LineChart data={history} yDomain={[0, numCores]} />
-            <button onClick={this.handleStressBtnClick} >
-              {this.state.stressTestOn ? 'Stop Stress Test' : 'Start stress test'}
-            </button>
+            <div className={classes.actionBtns} >
+              <button className={classesBtn.btn} onClick={this.handleStressStart} >
+                {!this.state.stressTestCount ? 'Start Stress Test' : 'Increase Load'}
+              </button>
+              <button className={classesBtn.btn} onClick={this.handleStressStop} >
+                {'Stop Stress Test'}
+              </button>
+            </div>
           </section>
 
           <section>
