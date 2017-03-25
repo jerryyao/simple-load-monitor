@@ -1,4 +1,5 @@
 'use strict';
+
 const express = require('express')
 const app = express()
 const server = require('http').Server(app)
@@ -12,7 +13,7 @@ const NUM_CPUS = os.cpus().length
 const LOAD_ALERT_THRESHOLD = NUM_CPUS / 4;
 
 const history = new Queue();
-let eventBuffer = [];
+const eventBuffer = [];
 let lastNotification = null;
 
 const listen = () => {
@@ -22,9 +23,9 @@ const listen = () => {
 };
 
 const close = () => {
-    server.close(() => {
-      console.log('Server stopped.');
-    });
+  server.close(() => {
+    console.log('Server stopped.');
+  });
 };
 
 // Broadcast monitor events
@@ -44,7 +45,7 @@ const handleMonitor = (e) => {
     const total = eventBuffer.reduce((sum, e) => sum + e.loadavg, 0);
     const avg = total / eventBuffer.length;
     const isAlert = avg > LOAD_ALERT_THRESHOLD;
-    const notification = { loadAvg: avg, isAlert, timestamp: dataPoint.timestamp }
+    const notification = { loadAvg: avg, isAlert, timestamp: dataPoint.timestamp };
 
     // Emit notification only if it's an alert or recovery
     if (isAlert || (!isAlert && !!lastNotification && lastNotification.isAlert)) {
@@ -68,12 +69,12 @@ app.use('/', express.static('public'));
 
 // Start os monitor
 monitor.start({
-  delay: 1000,
+  delay: monitor.seconds(1), // TODO 10s
   immediate: true,
 });
 
 // Listen to monitor events
-monitor.on('monitor', handleMonitor)
+monitor.on('monitor', handleMonitor);
 
 // Setup socket connection with client
 io.on('connection', (client) => {

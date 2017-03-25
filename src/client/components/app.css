@@ -4,6 +4,11 @@
 
 html {
   font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Geneva, Verdana, sans-serif;
+  color: #4d4d4d;
+}
+
+h2 {
+  margin: 10px 0;
 }
 
 .app {
@@ -16,5 +21,5 @@ html {
 }
 
 .notifications {
-  
+  margin-bottom: 20px;
 }
