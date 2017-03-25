@@ -2,9 +2,9 @@ import createActions from 'src/lib/utils/create-actions';
 import { createReducer } from 'redux-act';
 
 export const initialState = {
-  server: {
-    numCores: 8,
-    loadThreshold: 2,
+  serverInfo: {
+    numCores: null,
+    loadThreshold: null,
   },
   history: [],
   notifications: [

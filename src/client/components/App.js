@@ -21,7 +21,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { history, notifications, server: { numCores } } = this.props.model;
+    const { history, notifications, serverInfo: { numCores, loadThreshold } } = this.props.model;
     return (
       <div>
         <header className={classes.header} >
@@ -31,6 +31,10 @@ class App extends React.Component {
         <div className={classes.appBody} >
           <section>
             <h2>{'CPU Load Average over the past 10 minutes'}</h2>
+            <p className={classes.description} >
+              {numCores && loadThreshold ?
+                `Number of cores detected: ${numCores}. The alert threshold has been set to ${loadThreshold}.` : ''}
+            </p>
             <LineChart data={history} yDomain={[0, numCores]} />
             <div className={classes.actionBtns} >
               <button className={classesBtn.btn} onClick={this.handleStressStart} >

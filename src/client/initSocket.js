@@ -5,7 +5,7 @@ const initSocket = (dispatch) => {
   const socket = io.connect('http://localhost:3000/');
 
   socket.on('initialState', (data) => {
-    // dispatch(actions.);
+    dispatch(actions.setField({ key: 'serverInfo', value: data.serverInfo }));
   });
 
   socket.on('monitor', (history) => {

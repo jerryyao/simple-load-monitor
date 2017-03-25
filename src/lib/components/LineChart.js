@@ -6,40 +6,42 @@ import classes from './lineChart.css';
 class LineChart extends React.Component {
   constructor(props) {
     super(props);
-    const { width, height, margin, yDomain } = props;
+    const { width, height, margin } = props;
     const x = d3.scaleTime()
       .range([0, width - margin.left - margin.right]);
 
     const y = d3.scaleLinear()
-      .domain(yDomain)
       .range([height - margin.top - margin.bottom, 0]);
 
-    this.state = { x, y };
+    const xAxis = d3.axisBottom(x).tickArguments([5, d3.timeFormat('%I:%M:%S')]);
+    const yAxis = d3.axisLeft(y).tickArguments(5);
+
+    this.state = { x, y, xAxis, yAxis };
   }
 
   componentWillMount() {
     const x = this.state.x.domain(d3.extent(this.props.data, d => d.date));
-    this.setState({ x });
+    const y = this.state.y.domain(this.props.yDomain);
+    this.setState({ x, y });
   }
 
   componentWillReceiveProps(nextProps) {
     const x = this.state.x.domain(d3.extent(nextProps.data, d => d.date));
-    this.setState({ x });
+    const y = this.state.y.domain(nextProps.yDomain);
+    this.setState({ x, y });
   }
 
   componentDidMount() {
     const { height, margin } = this.props;
-    const { x, y } = this.state;
+    const { xAxis, yAxis } = this.state;
 
     // Add the X Axis
-    const xAxis = d3.axisBottom(x).tickArguments([10, d3.timeFormat('%h:%m:$s')]);
     d3.select(this.svg).append('g')
       .attr('class', cx(classes.axis, classes.xAxis))
       .attr('transform', `translate(0,${height - margin.top - margin.bottom})`)
       .call(xAxis);
 
     // Add the Y Axis
-    const yAxis = d3.axisLeft(y).tickArguments(5);
     d3.select(this.svg).append('g')
       .attr('class', cx(classes.axis, classes.yAxis))
       .call(yAxis)
@@ -53,13 +55,15 @@ class LineChart extends React.Component {
   }
 
   componentDidUpdate() {
-    const { x } = this.state;
-    // Update the X Axis
-    const xAxis = d3.axisBottom(x).tickArguments([5, d3.timeFormat('%I:%M:%S')]);
+    // Update the axes
+    const { xAxis, yAxis } = this.state;
     const svg = d3.select(this.svg).transition();
     svg.select(`.${classes.xAxis}`)
       .duration(100)
       .call(xAxis);
+    svg.select(`.${classes.yAxis}`)
+      .duration(100)
+      .call(yAxis);
   }
 
   _renderLine = () => {

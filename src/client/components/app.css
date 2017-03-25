@@ -31,6 +31,10 @@ section {
   position: relative;
 }
 
+p {
+  margin: 0;
+}
+
 .appBody {
   max-width: 800px;
   position: absolute;
@@ -58,4 +62,8 @@ section {
 
 .notifications {
   margin-bottom: 20px;
+}
+
+.description {
+  font-size: 12px;
 }

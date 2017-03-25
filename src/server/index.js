@@ -9,8 +9,8 @@ const monitor = require('os-monitor')
 const Queue = require('./queue');
 const exec = require('child_process').exec;
 
-const NUM_CPUS = os.cpus().length
-const LOAD_ALERT_THRESHOLD = NUM_CPUS / 4;
+const NUM_CPUS = os.cpus().length;
+const LOAD_ALERT_THRESHOLD = Math.ceil(NUM_CPUS / 4);
 
 const history = new Queue();
 const eventBuffer = [];
@@ -79,6 +79,10 @@ monitor.on('monitor', handleMonitor);
 // Setup socket connection with client
 io.on('connection', (client) => {
   client.emit('initialState', {
+    serverInfo: {
+      numCores: NUM_CPUS,
+      loadThreshold: LOAD_ALERT_THRESHOLD,
+    },
     history: history.toArray(),
   });
 
