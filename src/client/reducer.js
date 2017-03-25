@@ -7,23 +7,7 @@ export const initialState = {
     loadThreshold: null,
   },
   history: [],
-  notifications: [
-    {
-      "loadAvg": 1.9803873697916667,
-      "isAlert": false,
-      "timestamp": 149032334498351
-    },
-    {
-      "loadAvg": 1.9803873697916667,
-      "isAlert": true,
-      "timestamp": 149032343498351
-    },
-    {
-      "loadAvg": 1.9803873697916667,
-      "isAlert": false,
-      "timestamp": 149032349834351
-    },
-  ],
+  notifications: [],
 };
 
 export const actions = createActions('simpleLoadMonitor', [

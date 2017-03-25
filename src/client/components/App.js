@@ -3,7 +3,6 @@ import LineChart from 'src/lib/components/LineChart';
 import classesBtn from 'src/lib/styles/buttons.css';
 import classes from './app.css';
 import Notification from './Notification';
-import { actions } from '../reducer';
 
 class App extends React.Component {
   state = {

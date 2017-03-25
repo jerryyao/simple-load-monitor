@@ -13,7 +13,7 @@ class LineChart extends React.Component {
     const y = d3.scaleLinear()
       .range([height - margin.top - margin.bottom, 0]);
 
-    const xAxis = d3.axisBottom(x).tickArguments([5, d3.timeFormat('%I:%M:%S')]);
+    const xAxis = d3.axisBottom(x).tickArguments([5, d3.timeFormat('%I:%M')]);
     const yAxis = d3.axisLeft(y).tickArguments(5);
 
     this.state = { x, y, xAxis, yAxis };

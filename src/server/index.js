@@ -1,16 +1,17 @@
-'use strict';
+'use strict'; // eslint-disable-line
 
-const express = require('express')
-const app = express()
-const server = require('http').Server(app)
-const io = require('socket.io')(server)
-const os = require('os')
-const monitor = require('os-monitor')
+const express = require('express');
+
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+const os = require('os');
+const monitor = require('os-monitor');
 const Queue = require('./queue');
 const exec = require('child_process').exec;
 
 const NUM_CPUS = os.cpus().length;
-const LOAD_ALERT_THRESHOLD = Math.ceil(NUM_CPUS / 4);
+const LOAD_ALERT_THRESHOLD = Math.ceil(NUM_CPUS / 3);
 
 const history = new Queue();
 const eventBuffer = [];
@@ -18,13 +19,7 @@ let lastNotification = null;
 
 const listen = () => {
   server.listen(3000, () => {
-    console.log('Server listening on port 3000...');
-  })
-};
-
-const close = () => {
-  server.close(() => {
-    console.log('Server stopped.');
+    console.log('Server listening on port 3000...'); // eslint-disable-line
   });
 };
 
@@ -42,13 +37,8 @@ const handleMonitor = (e) => {
 
   eventBuffer.push(dataPoint);
   if (isFull(eventBuffer, monitor.seconds(5))) {
-    const total = eventBuffer.reduce((sum, e) => sum + e.loadavg, 0);
-    const avg = total / eventBuffer.length;
-    const isAlert = avg > LOAD_ALERT_THRESHOLD;
-    const notification = { loadAvg: avg, isAlert, timestamp: dataPoint.timestamp };
-
-    // Emit notification only if it's an alert or recovery
-    if (isAlert || (!isAlert && !!lastNotification && lastNotification.isAlert)) {
+    const notification = checkBufferForNotification(eventBuffer, lastNotification);
+    if (notification) {
       lastNotification = notification;
       io.emit('notification', notification);
     }
@@ -64,12 +54,25 @@ const isFull = (array, deltaMaxTime) => {
   return newest - oldest >= deltaMaxTime;
 };
 
+const checkBufferForNotification = (eventBuffer, lastNotification) => {
+  let notification = null;
+  const total = eventBuffer.reduce((sum, e) => sum + e.loadavg, 0);
+  const avg = total / eventBuffer.length;
+  const isAlert = avg > LOAD_ALERT_THRESHOLD;
+
+  // Emit notification only if it's an alert or recovery
+  if (isAlert || (!isAlert && !!lastNotification && lastNotification.isAlert)) {
+    notification = { loadAvg: avg, isAlert, timestamp: eventBuffer[eventBuffer.length - 1].timestamp };
+  }
+  return notification;
+};
+
 // Route to index.html
 app.use('/', express.static('public'));
 
 // Start os monitor
 monitor.start({
-  delay: monitor.seconds(1), // TODO 10s
+  delay: monitor.seconds(10),
   immediate: true,
 });
 
@@ -97,3 +100,5 @@ io.on('connection', (client) => {
 
 // Start server
 listen();
+
+module.exports = { checkBufferForNotification };
