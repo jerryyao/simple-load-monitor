@@ -7,17 +7,41 @@ html {
   color: #4d4d4d;
 }
 
+body {
+  margin: 0;
+}
+
+h1, h2 {
+  margin: 0;
+  color: #51326f;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 25px;
+  font-weight: 700;
+}
+
 h2 {
+  font-size: 23px;
   margin: 10px 0;
 }
 
-.app {
+.appBody {
   max-width: 800px;
   position: absolute;
   right: 0;
   left: 0;
   margin-right: auto;
   margin-left: auto;
+}
+
+.header {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 25px;
+  margin-bottom: 15px;
+  background-color: #f7f8f9;
 }
 
 .notifications {

@@ -9,14 +9,14 @@ const initSocket = (dispatch) => {
   });
 
   socket.on('monitor', (history) => {
-    dispatch(actions.setField({ key: 'history', value: history }));
+    dispatch(actions.setHistory(history));
   });
 
   socket.on('notification', (notification) => {
     dispatch(actions.addNotification(notification));
   });
 
-  // socket.emit('startIncreaseLoad');
+  return socket;
 };
 
 export default initSocket;

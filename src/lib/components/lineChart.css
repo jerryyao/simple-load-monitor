@@ -1,7 +1,24 @@
 .line {
   fill: none;
-  stroke: red;
+  stroke: #51326f;
   stroke-linejoin: round;
   stroke-linecap: round;
   stroke-width: 1.5;
+}
+
+.axis {
+
+}
+
+.xAxis {
+}
+
+.yAxis {
+}
+
+.axis path {
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
 }

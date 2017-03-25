@@ -1,76 +1,70 @@
 import React, { PropTypes } from 'react';
 import * as d3 from 'd3';
+import cx from 'classnames';
 import classes from './lineChart.css';
 
 class LineChart extends React.Component {
-  state = {
-    x: null,
-    y: null,
+  constructor(props) {
+    super(props);
+    const { width, height, margin, yDomain } = props;
+    const x = d3.scaleTime()
+      .range([0, width - margin.left - margin.right]);
+
+    const y = d3.scaleLinear()
+      .domain(yDomain)
+      .range([height - margin.top - margin.bottom, 0]);
+
+    this.state = { x, y };
+  }
+
+  componentWillMount() {
+    const x = this.state.x.domain(d3.extent(this.props.data, d => d.date));
+    this.setState({ x });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { data, width, height } = nextProps;
-    data.forEach((d) => {
-      d.date = new Date(d.timestamp);
-    });
-    const x = d3.scaleTime()
-      .domain(d3.extent(data, d => d.date))
-      .range([0, width]);
-
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(data, d => d.loadavg)])
-      .range([height, 0]);
-
-    this.setState({ x, y });
+    const x = this.state.x.domain(d3.extent(nextProps.data, d => d.date));
+    this.setState({ x });
   }
 
   componentDidMount() {
+    const { height, margin } = this.props;
     const { x, y } = this.state;
 
     // Add the X Axis
-    const xAxis = d3.axisBottom(x).tickArguments(5);
+    const xAxis = d3.axisBottom(x).tickArguments([10, d3.timeFormat('%h:%m:$s')]);
     d3.select(this.svg).append('g')
-      .attr('class', 'xAxis')
-      .attr('transform', `translate(0,${this.props.height})`)
+      .attr('class', cx(classes.axis, classes.xAxis))
+      .attr('transform', `translate(0,${height - margin.top - margin.bottom})`)
       .call(xAxis);
 
     // Add the Y Axis
     const yAxis = d3.axisLeft(y).tickArguments(5);
     d3.select(this.svg).append('g')
-      .attr('class', 'yAxis')
+      .attr('class', cx(classes.axis, classes.yAxis))
       .call(yAxis)
-      .append("text")
-        .attr("fill", "#000")
-        .attr("transform", "rotate(-90)")
-        .attr("y", 6)
-        .attr("dy", "0.71em")
-        .attr("text-anchor", "end")
-        .text("Load Average");
+      .append('text')
+        .attr('fill', '#000')
+        .attr('transform', 'rotate(-90)')
+        .attr('y', 6)
+        .attr('dy', '0.71em')
+        .attr('text-anchor', 'end')
+        .text('Load Average');
   }
 
   componentDidUpdate() {
-    const { x, y } = this.state;
-
-    // // Add the X Axis
-    // const xAxis = d3.axisBottom(x).tickArguments(5);
-    // d3.select(this.svg).append('g')
-    //   .attr('class', 'x axis')
-    //   .attr('transform', `translate(0,${this.props.height})`)
-    //   .call(xAxis);
-
-    // Add the Y Axis
-    const yAxis = d3.axisLeft(y).tickArguments(5);
+    const { x } = this.state;
+    // Update the X Axis
+    const xAxis = d3.axisBottom(x).tickArguments([5, d3.timeFormat('%I:%M:%S')]);
     const svg = d3.select(this.svg).transition();
-    svg.select('.yAxis').call(yAxis);
+    svg.select(`.${classes.xAxis}`)
+      .duration(100)
+      .call(xAxis);
   }
 
   _renderLine = () => {
     const { data } = this.props;
     const { x, y } = this.state;
-
-    data.forEach((d) => {
-      d.date = new Date(d.timestamp);
-    });
 
     // Add the valueline path.
     const valueline = d3.line()
@@ -80,22 +74,20 @@ class LineChart extends React.Component {
   }
 
   render() {
+    const { width, height, margin } = this.props;
     const d = this._renderLine();
-    const xTicks = null;
     return (
       <svg
-        width={600}
-        height={300}
+        width={width}
+        height={height}
       >
-        <g ref={ref => { this.svg = ref; }} >
-          <g>
-            <path />
-            {xTicks}
-          </g>
+        <g
+          ref={ref => { this.svg = ref; }}
+          transform={`translate(${margin.left},${margin.top})`}
+        >
           <path
             className={classes.line}
             d={d}
-            transform={`translate(${20},${20})`}
           />
         </g>
       </svg>
@@ -106,12 +98,15 @@ class LineChart extends React.Component {
 LineChart.defaultProps = {
   width: 600,
   height: 300,
+  margin: { top: 20, right: 20, bottom: 30, left: 50 },
 };
 
 LineChart.propTypes = {
   data: PropTypes.array.isRequired,
   width: PropTypes.number,
   height: PropTypes.number,
+  margin: PropTypes.object,
+  yDomain: PropTypes.array.isRequired,
 };
 
 export default LineChart;

@@ -11,10 +11,11 @@ el.id = 'react-root';
 document.body.appendChild(el);
 
 const store = createStore(reducer);
-const Container = connect(s => ({ model: s }))(App);
+
+// Init socket connection to redux store
+const socket = initSocket(store.dispatch);
+
+const Container = connect(s => ({ model: s, socket }))(App);
 
 // Render react app
 ReactDOM.render(<Container store={store} />, el);
-
-// Init socket connection to redux store
-initSocket(store.dispatch);
