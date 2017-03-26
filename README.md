@@ -54,4 +54,5 @@ The graph itself is built with a hybrid approach: React takes care of rendering 
 - Avoid duplicating data points in a 2-minutes event buffer if the same data is also stored in the 10-minutes history queue.
 - Improve the integration between React and D3 and build a library of graph components.
 - Improve CSS support by adding variables and other utilities to css modules, e.g. using `post-css`.
+- Add support for client-side routing, e.g. [react-router](https://github.com/ReactTraining/react-router), to have a Single Page web Application that allows to quickly route to different pages and incrementally load content via Ajax.
 - Add support for rendering of React server-side for optimal page load. This is only worth doing if we care about page load time and SEO concerns in production.
