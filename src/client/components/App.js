@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
-import LineChart from 'src/lib/components/LineChart';
-import classesBtn from 'src/lib/styles/buttons.css';
+import LineChart from 'src/client/lib/components/LineChart';
+import classesBtn from 'src/client/lib/styles/buttons.css';
 import classes from './app.css';
 import Notification from './Notification';
 

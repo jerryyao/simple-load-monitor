@@ -1,4 +1,4 @@
-import createActions from 'src/lib/utils/create-actions';
+import createActions from 'src/client/lib/utils/create-actions';
 import { createReducer } from 'redux-act';
 
 export const initialState = {

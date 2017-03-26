@@ -7,7 +7,7 @@
     "start": "npm i && webpack && npm run copy && node src/server/index.js",
     "dev": "concurrently --kill-others \"nodemon src/server/index.js\" \"npm run copy && webpack --watch\"",
     "copy": "cp src/client/index.html public/index.html",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node src/server/modules/alerting.test.js"
   },
   "author": "Matteo Palvarini",
   "license": "MIT",
@@ -34,11 +34,12 @@
     "babel-preset-stage-0": "^6.22.0",
     "concurrently": "^3.4.0",
     "css-loader": "^0.27.3",
-    "style-loader": "^0.16.0",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-react": "^6.10.3"
+    "eslint-plugin-react": "^6.10.3",
+    "style-loader": "^0.16.0",
+    "tape": "^4.6.3"
   }
 }

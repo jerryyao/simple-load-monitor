@@ -9,6 +9,7 @@ const os = require('os');
 const monitor = require('os-monitor');
 const Queue = require('./queue');
 const exec = require('child_process').exec;
+const checkBufferForNotification = require('./modules/alerting');
 
 const NUM_CPUS = os.cpus().length;
 const LOAD_ALERT_THRESHOLD = Math.ceil(NUM_CPUS / 3);
@@ -37,7 +38,7 @@ const handleMonitor = (e) => {
 
   eventBuffer.push(dataPoint);
   if (isFull(eventBuffer, monitor.minutes(2))) {
-    const notification = checkBufferForNotification(eventBuffer, notifications[0]);
+    const notification = checkBufferForNotification(eventBuffer, notifications[0], LOAD_ALERT_THRESHOLD);
     if (notification) {
       notifications.unshift(notification);
       io.emit('notification', notification);
@@ -52,19 +53,6 @@ const isFull = (array, deltaMaxTime) => {
   const oldest = array[0].timestamp;
   const newest = array[array.length - 1].timestamp;
   return newest - oldest >= deltaMaxTime;
-};
-
-const checkBufferForNotification = (eventBuffer, lastNotification) => {
-  let notification = null;
-  const total = eventBuffer.reduce((sum, e) => sum + e.loadavg, 0);
-  const avg = total / eventBuffer.length;
-  const isAlert = avg > LOAD_ALERT_THRESHOLD;
-
-  // Emit notification only if it's an alert or recovery
-  if (isAlert || (!isAlert && !!lastNotification && lastNotification.isAlert)) {
-    notification = { loadAvg: avg, isAlert, timestamp: eventBuffer[eventBuffer.length - 1].timestamp };
-  }
-  return notification;
 };
 
 // Route to index.html
