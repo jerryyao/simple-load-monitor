@@ -1,25 +1,25 @@
 # Simple Load Monitor
 
-Simple live CPU monitor built in react and D3.
+Simple live CPU monitor built in React and D3.
 
 ## Screenshot
 
-![Screenshot]()
+![Screenshot](https://github.com/teopalva/simple-load-monitor/blob/master/public/img/screenshot.png)
 
 ## Getting Started
 
 ### Run
-  git clone
-  cd simple-load-monitor
-  npm start
+  `git clone https://github.com/teopalva/simple-load-monitor.git`<br>
+  `cd simple-load-monitor`<br>
+  `npm start`
 
-Then visit http://localhost:3000/.
+  Then visit http://localhost:3000/.
 
 ### Develop
-  npm run dev
+  `npm run dev`
 
 ### Test
-  npm test
+  `npm test`
 
 ## Tech stack
 - node.js
