@@ -6,6 +6,8 @@ const initSocket = (dispatch) => {
 
   socket.on('initialState', (data) => {
     dispatch(actions.setField({ key: 'serverInfo', value: data.serverInfo }));
+    dispatch(actions.setField({ key: 'notifications', value: data.notifications }));
+    dispatch(actions.setHistory(data.history));
   });
 
   socket.on('monitor', (history) => {

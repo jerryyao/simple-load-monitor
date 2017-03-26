@@ -4,10 +4,10 @@
   stroke-linejoin: round;
   stroke-linecap: round;
   stroke-width: 1.5;
+  shape-rendering: geometricPrecision;
 }
 
 .axis {
-
 }
 
 .xAxis {
@@ -18,7 +18,6 @@
 
 .axis path {
   fill: none;
-  stroke: grey;
   stroke-width: 1;
   shape-rendering: crispEdges;
 }

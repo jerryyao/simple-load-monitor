@@ -15,7 +15,7 @@ const LOAD_ALERT_THRESHOLD = Math.ceil(NUM_CPUS / 3);
 
 const history = new Queue();
 const eventBuffer = [];
-let lastNotification = null;
+const notifications = [];
 
 const listen = () => {
   server.listen(3000, () => {
@@ -36,10 +36,10 @@ const handleMonitor = (e) => {
   }
 
   eventBuffer.push(dataPoint);
-  if (isFull(eventBuffer, monitor.seconds(5))) {
-    const notification = checkBufferForNotification(eventBuffer, lastNotification);
+  if (isFull(eventBuffer, monitor.minutes(2))) {
+    const notification = checkBufferForNotification(eventBuffer, notifications[0]);
     if (notification) {
-      lastNotification = notification;
+      notifications.unshift(notification);
       io.emit('notification', notification);
     }
     eventBuffer.length = 0; // reset buffer
@@ -87,6 +87,7 @@ io.on('connection', (client) => {
       loadThreshold: LOAD_ALERT_THRESHOLD,
     },
     history: history.toArray(),
+    notifications,
   });
 
   client.on('startIncreaseLoad', () => {

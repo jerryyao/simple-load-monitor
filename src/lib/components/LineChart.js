@@ -13,21 +13,23 @@ class LineChart extends React.Component {
     const y = d3.scaleLinear()
       .range([height - margin.top - margin.bottom, 0]);
 
-    const xAxis = d3.axisBottom(x).tickArguments([5, d3.timeFormat('%I:%M')]);
+    const xAxis = d3.axisBottom(x).tickArguments([8, d3.timeFormat('%I:%M')]);
     const yAxis = d3.axisLeft(y).tickArguments(5);
 
     this.state = { x, y, xAxis, yAxis };
   }
 
   componentWillMount() {
-    const x = this.state.x.domain(d3.extent(this.props.data, d => d.date));
-    const y = this.state.y.domain(this.props.yDomain);
-    this.setState({ x, y });
+    this.updateStateFromProps(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const x = this.state.x.domain(d3.extent(nextProps.data, d => d.date));
-    const y = this.state.y.domain(nextProps.yDomain);
+    this.updateStateFromProps(nextProps);
+  }
+
+  updateStateFromProps = (props) => {
+    const x = this.state.x.domain(d3.extent(props.data, d => d.date));
+    const y = this.state.y.domain(props.yDomain);
     this.setState({ x, y });
   }
 
