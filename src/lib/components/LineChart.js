@@ -7,16 +7,19 @@ class LineChart extends React.Component {
   constructor(props) {
     super(props);
     const { width, height, margin } = props;
+    const actualWidth = width - margin.left - margin.right;
+    const actualHeight = height - margin.top - margin.bottom;
     const x = d3.scaleTime()
-      .range([0, width - margin.left - margin.right]);
+      .range([0, actualWidth]);
 
     const y = d3.scaleLinear()
-      .range([height - margin.top - margin.bottom, 0]);
+      .range([actualHeight, 0]);
 
     const xAxis = d3.axisBottom(x).tickArguments([8, d3.timeFormat('%I:%M')]);
-    const yAxis = d3.axisLeft(y).tickArguments(5);
+    const yAxis = d3.axisLeft(y).tickArguments(8);
+    const grid = d3.axisLeft(y).ticks(8).tickSize(-actualWidth).tickFormat('');
 
-    this.state = { x, y, xAxis, yAxis };
+    this.state = { x, y, xAxis, yAxis, grid };
   }
 
   componentWillMount() {
@@ -35,7 +38,7 @@ class LineChart extends React.Component {
 
   componentDidMount() {
     const { height, margin } = this.props;
-    const { xAxis, yAxis } = this.state;
+    const { xAxis, yAxis, grid } = this.state;
 
     // Add the X Axis
     d3.select(this.svg).append('g')
@@ -54,11 +57,16 @@ class LineChart extends React.Component {
         .attr('dy', '0.71em')
         .attr('text-anchor', 'end')
         .text('Load Average');
+
+    // Add grid
+    d3.select(this.svg).insert('g',':first-child')
+      .attr('class', classes.grid)
+      .call(grid);
   }
 
-  componentDidUpdate() {
+  componentWillUpdate() {
     // Update the axes
-    const { xAxis, yAxis } = this.state;
+    const { xAxis, yAxis, grid } = this.state;
     const svg = d3.select(this.svg).transition();
     svg.select(`.${classes.xAxis}`)
       .duration(100)
@@ -66,6 +74,9 @@ class LineChart extends React.Component {
     svg.select(`.${classes.yAxis}`)
       .duration(100)
       .call(yAxis);
+    svg.select(`.${classes.grid}`)
+      .duration(100)
+      .call(grid);
   }
 
   _renderLine = () => {
